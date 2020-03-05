@@ -55,8 +55,11 @@ public class NetworkHandler {
      */
     public NetworkHandler(Game game, int connectedPlayers)
     {
-        this.game = game;
         this.isHost = true;
+
+        this.game = game;
+        this.game.setNetworkHandler(this);
+
         this.totalPlayers = connectedPlayers + 1;
         this.playerAddresses = new ArrayList<InetAddress>();
         this.playerPorts = new ArrayList<Integer>();
@@ -74,9 +77,11 @@ public class NetworkHandler {
      * @param address
      * @param port
      */
-    public NetworkHandler(String address, int port)
+    public NetworkHandler(Game game, String address, int port)
     {
         this.isHost = false;
+        this.game = game;
+        this.game.setNetworkHandler(this);
 
         initUpdateStateThread();
 
@@ -150,6 +155,11 @@ public class NetworkHandler {
                     buf = strt.getBytes();
                     DatagramPacket packet = new DatagramPacket(buf, buf.length, playerAddresses.get(i) , playerPorts.get(i));
                     skt_in.send(packet);
+
+                    // send game state
+                    //String strt = this.game;
+                    DatagramPacket packetState = new DatagramPacket(buf, buf.length, playerAddresses.get(i) , playerPorts.get(i));
+                    skt_in.send(packetState);
                 }
                 catch (Exception e) {
                     System.err.println("Host: Couldn't send start signal");
@@ -158,8 +168,9 @@ public class NetworkHandler {
         }
         System.out.println("Sent all start signals");
 
-        // start game
+        // start game for host
         startGame();
+
     }
 
     /**
@@ -460,13 +471,9 @@ public class NetworkHandler {
     {
         System.out.println("starting my game");
         System.out.println("Player No. " + Integer.toString(this.playerNum));
-        //timer.scheduleAtFixedRate(new DropCheckTimer(), 1000, 500);
-        //startTime = System.currentTimeMillis();
 
-        // maintaining last receieved stats
-        //lastReceived = new long[totalPlayers];
+
         this.isInGame     = new boolean[totalPlayers];
-        //Arrays.fill(this.lastReceived,System.currentTimeMillis());
         Arrays.fill(this.isInGame,true);
 
         this.gameStart = true;
@@ -527,4 +534,7 @@ public class NetworkHandler {
         };
     }
 
+    public int getTotalPlayers() {
+        return totalPlayers;
+    }
 }

@@ -8,8 +8,9 @@ public class Player1 {
 
         // instance of local game
         Game game = new Game();
+        NetworkHandler networkHandle = new NetworkHandler(game, "127.0.0.1", 1231);
 
-
-        NetworkHandler networkHandle = new NetworkHandler("127.0.0.1", 1231);
+        // play game
+        game.play();
     }
 }
