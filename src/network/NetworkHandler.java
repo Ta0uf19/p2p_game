@@ -369,7 +369,6 @@ public class NetworkHandler {
         {
             // parsing for other players
             int i = 0;
-            int j = 1;		// to fill for other players
             for (String cur: ackdata.split(","))
             {
                 if (i==0)
@@ -389,8 +388,6 @@ public class NetworkHandler {
                 else if (i==2)
                 {
                     this.totalPlayers = Integer.parseInt(cur.trim());
-                    //aiPlayers    = totalPlayers - connectedPlayers - 1 ;
-                    //board.setNumPlayers(totalPlayers);
                     System.out.println("Connected Players : " + connectedPlayers);
                     System.out.println("Total Players     : " + totalPlayers);
                 }
@@ -399,13 +396,14 @@ public class NetworkHandler {
                 else
                 {
                     playerPorts.add(Integer.parseInt(cur.trim()));
-                    j += 1;
                 }
 
                 i+=1;
             }
         }
-        catch (Exception e) {System.out.println(e+"\n");}
+        catch (Exception e) {
+            System.out.println(e+"\n");
+        }
 
     }
 

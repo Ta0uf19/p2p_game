@@ -1,6 +1,6 @@
 package game;
 
-public interface IGame {
+public interface IGameNetwork {
 
     /**
      * update state of local game (from network)
@@ -13,7 +13,7 @@ public interface IGame {
     /**
      * Send your updated state of game to others player (in network)
      * you'll need to send specific packet format
-     * @param packet
+     *
      */
-    String updateStateOnNetwork();
+    void updateStateOnNetwork();
 }
